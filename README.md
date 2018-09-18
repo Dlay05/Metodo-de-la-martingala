@@ -1,6 +1,6 @@
 # CM-274A
 ===
-**Lugar**: [Escuela Nacional de Estadística e Informática (ENEI)](https://www.inei.gob.pe/enei/)
+**Lugar**: [Universidad Nacional de Ingenieria - Facultad de Ciencias](http://fc.uni.edu.pe/fc/)
 
 **Profesor:** Cesar Lara Avila.
 
