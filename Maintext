@@ -1,0 +1,339 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{IEEE}  % Comment this line out
+                                                          % if you need a4paper
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+\usepackage[utf8]{inputenc}
+\usepackage[usenames]{color}
+\usepackage{amssymb, amsmath, amsbsy}
+\usepackage{amsfonts}
+\usepackage{mathrsfs,amsmath} 
+\usepackage{multirow}
+\usepackage{lscape}
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphics} % for pdf, bitmapped graphics files
+\usepackage{epsfig} % for postscript graphics files
+\usepackage{mathptmx} % assumes new font selection scheme installed
+\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+
+\title{\LARGE \bf
+Martingalas: el teorema de parada de martingalas, la desigualdad de Wald y la desigualdad de Azuma-Hoeffding*'**
+}
+
+%\author{ \parbox{3 in}{\centering Huibert Kwakernaak*
+%         \thanks{*Use the $\backslash$thanks command to put information here}\\
+%         Faculty of Electrical Engineering, Mathematics and Computer Science\\
+%         University of Twente\\
+%         7500 AE Enschede, The Netherlands\\
+%         {\tt\small h.kwakernaak@autsubmit.com}}
+%         \hspace*{ 0.5 in}
+%         \parbox{3 in}{ \centering Pradeep Misra**
+%         \thanks{**The footnote marks may be inserted manually}\\
+%        Department of Electrical Engineering \\
+%         Wright State University\\
+%         Dayton, OH 45435, USA\\
+%         {\tt\small pmisra@cs.wright.edu}}
+%}
+
+\author{Morante Moran David Willians$^{1}$, Valdivia Fuentes Juan Daniel$^{2}$, Geronimo Aparicio Mirian Andrea$^{3}$\\
+ \small Universidad Nacional de Ingeniería - Facultad de Ciencias - Escuela profesional de Matemática
+\thanks{*Procesos Estocásticos}% <-this % stops a space
+\thanks{*Trabajo colaborativo disponible en Github}
+\thanks{$^{1}$Morante Moran David - 20170333E - Escuela profesional de Matemática
+        }%
+\thanks{$^{2}$Valdivia Fuentes Juan Daniel -20162677K - Escuela profesional de Matemática
+        }%
+ \thanks{$^{3}$Geronimo Aparicio Mirian - 20172192J - Escuela profesional de Matemática
+      }%
+}
+
+
+\begin{document}
+
+
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+ Se hablará de los procesos estocásticos, que sirven para usar magnitudes aleatorias que varían con el tiempo o para caracterizar una sucesión de variables aleatorias (estocásticas) que evolucionan en función de otra variable, generalmente el tiempo.
+Tambien  estudiamos los teoremas y desigualdades en la cual intervienen las martingalas, una vez entendido eso trataremos problemas y aplicaciones interesantes que se presentan con mayor frecuencia en la vida cotidiana, dándoles una solución y  integrandole a ello el uso del lenguaje R.
+
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{INTRODUCCIÓN}\label{sec:1}
+Dando un preámbulo a lo que será una definición formal, las martingalas son procesos estocásticos que modelan juegos justos; en promedio no se pierde ni se gana en la siguiente observación del proceso.\\
+
+Existen muchos problemas interesantes a tratar relacionados a este proceso estocástico, sin embargo, en este artículo abordaremos  en particular  el problema conocido como "La ruina del jugador", en el cual se utilizará el teorema de parada para martingalas acotadas.\\
+
+El objetivo de este estudio es  explicar y enfatizar más la teoría de probabilidades  y desarrollar algun algoritmos y códigos en R que faciliten la comprensión teórica desde el punto de vista de la ciencia computacional. \\
+
+Para ello  en la sección \ref{sec:2.1} partiremos definiendo los conceptos de\textit{ Esperanza condiocional} y \textit{Filtración} para asi definir  en la ección \ref{sec:2.2} lo que es una \textit{Martingala} junto con sus teoremas y propiedades elementales. Luego de tener una vision amplia se aborada en la sección \ref{sec:2.3} los\textit{ Tiempos de paradas} para luego enunciar el \textit{Teorema de paradas para martingalas acotadas}, dando como ejemplo lo que es un camino aleatorio simple. Conceptos que son necesarios para abordar en la sección \ref{sec:2.4} el problema sobre el que versará el trabajo. Finalizando en la sección \ref{sec:2.5} con la \textit{Ecuación de Wald} y la \textit{desigualdad de Azuma-Hoeffding.} 
+
+\section{Definiciones}\label{sec:2}
+\subsection{Filtración}
+Una filtración \(\mathbb{F}\) es un conjunto indexado \(\mathcal{F}_{i}\) de subestructuras de una estructura algebraica \(\mathcal{F}\), recorriendo el subíndice i cierto conjunto I conjunto totalmente ordenado cumpliendo la condición:
+\begin{center}
+    $
+\forall i,j \in I : i\leq j \Rightarrow \mathcal{F}_{i} \subseteq \mathcal{F}_{j} $
+\end{center}
+
+
+si el indice i es el parámetro tiempo de un proceso estocástico entonces la filtración puede interpretarse como una representación de todo el histórico de información hasta el instante dado.
+\subsection{Esperanza condicional}\label{sec:2.1}
+Sea ($\Omega$,$\mathcal{F}$,$\mathbb{P}$) un espacio de probabilidad, con una variable aleatoria  X:$\Omega$ \xrightarrow{} \(\mathbb{R}^{n}\) y un sub-$\sigma$-algebra \\
+A continuación, una esperanza condicional de X dado por $\mathcal{H}$ (denotado como  $\mathbb{E}$ [X|$\mathcal{F}$]) es cualquier $\mathcal{H}$- función medible ($\Omega$ \xrightarrow{} $\mathbb{R}^{n}$) que satisface : \\
+
+\begin{equation*}
+\int_{H}^{} \mathbb{E} [X|\mathcal{F}] d\mathbb{P}(\omega) = \int_{H}^{} X(\omega) d \mathbb{P}(\omega)
+\end{equation*}
+
+para cada H $\in$ \(\mathcal{H}\). \\
+Tenga en cuenta que $\mathbb{E}$ [X|$\mathcal{H}$] es simplemente el nombre de la función esperanza condicional.
+
+
+\subsection{Martingala}\label{sec:2.2}
+Una definición básica de una martingala de tiempo discreto es un proceso estocástico de tiempo discreto (es decir, una secuencia de variables aleatorias)$ X_{1}, X_{2}, X_{3}$, ... que satisface para cualquier momento n:
+\begin{itemize}
+\item \(\mathbb{E}\)($|X_{n}$|)< $\infty$
+\item \(\mathbb{E}\)($X_{n+1}|X_{1},...,X_{n}$)=$X_{n}$
+\end{itemize}
+Es decir, el valor esperado condicional de la siguiente observación, dadas todas las observaciones anteriores, es igual a la observación más reciente.\\
+\subsubsection{ Martingala con respecto a otra secuencia}
+De manera más general, se dice que una secuencia$ Y_{1}, Y_{2}, Y_{3} $... es una martingala con respecto a otra secuencia  $X_{1}, X_{2}, X_{3}$, ... si para todo n.
+\begin{itemize}
+\item \(\mathbb{E}\)($|X_{n}$|) < $\infty$
+\item \(\mathbb{E}\)($Y_{n+1}|X_{1},...,X_{n}$)=$Y_{n}$
+\end{itemize}
+Del mismo modo, una martingala de tiempo continuo con respecto al proceso estocástico X(t) es un proceso estocástico Y(t) tal que para todo t
+\begin{itemize}
+\item \(\mathbb{E}\)($|Y_{n}$|) < $\infty$
+\item \(\mathbb{E}\)($Y_{t}|{X_{\tau},\tau \leq s} $)=$Y_{s}$ , $\forall s \leq t$.
+\end{itemize}
+Esto expresa la propiedad de que la expectativa condicional de una observación en el tiempo t, dadas todas las observaciones hasta el tiempo \textit{s}, es igual a la observación en el tiempo s (por supuesto, siempre que \textit{s} $\leq$ \textit{t}). Ademas $Y_{n}$ es medible con respecto a $X_{1},...,X_{n}$.
+
+\subsubsection{Definición general}
+Sea un espacio de probabilidad ($\Omega$,\(\mathcal{F}\),\(\mathbb{P}\)).
+Sea \(\mathbb{F}\) una filtración de $\sigma$-algebras:
+$
+\mathcal{F}_{1}  \subset ...  \subset \mathcal{F}_{t}\subseteq \mathcal{F}$
+
+Sea ${X(t)}=X_{1},X_{2},...,X_{n}$ una sucesion de variables aleatorias que forman un proceso estocástico.\\
+Entonces el proceso estocástico ${X(t),t\geq0}$ adaptado a la filtración \(\mathbb{F}\) recibe el nombre de martingala si :
+
+\begin{equation*}
+\mathbb{E} [X(t)|\mathcal{F}_{s}] = X(s)
+\end{equation*} Esto es, un proceso estocástico es una martingala cuando su esperanza en tiempo futuro es precisamente el valor que la variable tiene en tiempo presente. Esto significa que el proceso no tiene deriva estadística.
+
+
+
+\subsection{Tiempos de paradas}\label{sec:2.3}
+Sea {$Y_{n}$} una supermartingala con respecto a $X_{n}$, y sea $H_{n}$ una función de $(X_{0},X_{1},...,X_{n})$ que cumple 0 $ \leq H_{n} \leq  c_{n}$.Entonces:
+\begin{equation*}
+W_{n}= W_{0} + \sum_{m=1}^{n} H_{m}(Y_{m}-Y_{m-1})
+\end{equation*} , es una supermartingala. La interpretación de esto es que si un juego es desfavorable seguirá siendolo independientemente de cómo apostemos en cada momento. Decimos que \textbf{T} es un \textbf{tiempo de parada} respecto a $X_{n}$ cuando la ourrencia o no del suceso "paramos en el instante n"  \textbf{(T=n)} se puede determinar apartir de los valores 
+$X_{0},X_{1},...,X_{n}$.
+\subsubsection{Propiedades} Tiempos de paradas\\
+Denotemos \textbf{$T \wedge n$} el mı́nimo de T y n.
+Si $Y_{n}$ es una martingala con respecto a $X_{n} $ y \textbf{T} es un tiempo de parada con respecto a $X_{n} $ , entonces el proceso (truncado) $Y_{T\wedge n} $ es una martingala con respecto a $X_{n}$
+
+\subsection{Teorema de paradas para martingalas acotadas}
+Sea $M_{n}$ una martingala con respecto a $X_{n} $ , y sea \textbf{T} un
+tiempo de parada con respecto a $X_{n} $, con \(\mathbb{P}\)(\textbf{T} < $\infty$) = 1. Si
+existe una constante \textit{k} de manera que $|M_{T\wedge n}| \leq \textit{k}$,  $\forall$ \textit{s},entonces:
+\begin{equation*}
+\mathbb{E} (M_{T}) = \mathbb{E} (M_{0})
+\end{equation*}
+La idea bajo la condición $|M_{T\wedge n}| \leq \textit{k}$ para algún \textit{k} es que la
+cantidad de dinero disponible es limitada. En caso contrario,
+podrían darse situaciones en las que aplicando un criterio de
+parada tengamos siempre una ganancia.\\
+
+
+\section{"La ruina del jugador"}\label{sec:2.4}
+ Dicho problema consiste en calcular la probabilidad de que un jugador arruine al contrario en un juego a un número indeterminado de partidas, cuando los dos jugadores inician el juego con un cierto número de monedas cada uno.\\
+ Sea $S_{n}=S_{0}+\xi_{1}+...+\xi_{n}$, donde $\xi_{i}$ son i.i.d con \(\mathbb{P}\)$(\xi_{i}=1)=p$ y \(\mathbb{P}\)$(\xi_{i}=-1)=q:=1-p$. Ya hemos visto que g$($S_{n}$)_{n}$ es una martingala para g(x)=$(\frac{q}{p})^{x}$. \\ Sea T= min$\left\lbrace n : S_{n} \not\in (a,b) \right\rbrace$ \\
+ \begin{itemize}
+\item T es un tiempo de parada
+\item \(\mathbb{P}\)($ T < \infty$)=1.
+\item Si $S_{0}=x$, se cumple $(q/p)^{x}=(q/p)^{a}+[(q/p)^{b}-(q/p)^{a}]\mathbb{P}(S_{T}=b)$
+\end{itemize}\
+Si definimos $V_{y}$ = min$\left\lbrace   n \leq 0 : S_{n} = y  \right\rbrace$.\\
+\begin{equation*}
+    \mathbb{P}_{x}(V_{b}<V_{a})=\dfrac{(q/p)^{x}-(q/p)^{a}}{(q/p)^{b}-(q/p)^{a}}
+\end{equation*}
+
+
+ 
+ 
+
+\subsection{Ecuación de Wald}\label{sec:2.5}
+    Consideremos ahora un camino aleatorio $S_{n}=S_{0}+\xi_{1}+...+\xi_{n}$, donde $\left\lbrace{{\xi_{n}}}\right\rbrace_{n}$ son variables i.i.d. Supongamos que $\mu=E(\xi_{i})<\infty.$ Entonces $M_{n}=S_{n}-n\mu$ es una martingala respecto a $S_{n}$ .
+     \begin{itemize}
+         \item Si $T$ es un tiempo de parada con $E(T)<\infty$, entonces $E(S_{T}-L_{0})=\mu E(T)$.
+     \end{itemize}
+     Teniendo esto en cuenta, si consideramos un juego con ganacia $1$ con probabilidad $p$ y $y-1$ con probabilidad $1-p>p$, y comenzamos con $x$ euros, el tiempo medio en perderlo todo $(E_{x}V_{0})$ seria $\frac{x}{1-p}$.
+     
+     
+\subsection{Algunos artículos científicos relacionados.}
+\begin{itemize}
+    \item Cadenas de Markov: Estudio sobre el problema de la ruina del jugador, Autor: Marc Martínez, Universitat autònoma de Barcelona, Encontró mediante diferentes
+maneras de plantear la estrategia de
+la Martingala, el juego que mejor se adapte
+a las necesidades del jugador, en este
+caso  dos opciones o bien ampliar
+la duración del juego o aumentar la probabilidad
+de ganancia. Mediante cálculo de probabilidades
+y los procesos de simulación con
+código R,sirvieron para encontrar
+la situación más favorable en el problema.
+ \item PORTILLA, LILIANA MARGARITA; ARIAS MONTOYA, LEONEL; FERNÁNDEZ HENAO, SERGIO
+AUGUSTO
+,MARTINGALAS Y EL JUEGO DE LA RULETA,
+Scientia Et Technica, vol. XV, núm. 43, diciembre, 2009, pp. 124-129
+,Universidad Tecnológica de Pereira,En este trabajo se habló sobre el juego de la ruleta bajo el concepto de los
+procesos estocásticos, más específicamente sobre la martingala, ya que va muy
+relacionada con esta temática estocástica. Seguidamente se muestra un ejemplo
+de apuestas donde un jugador intenta ganarle a otro que nunca se rinde, lanzando
+una moneda al aire y apostando por la cara, de está manera mediante una
+simulación se observa el comportamiento de este tipo de apuestas, bajo el
+concepto de las martingalas, también se analiza los efectos presentados al
+cambiar los montos iniciales de apuesta y el trabajar con una moneda balanceada
+y otra desbalanceada. Este ejemplo es simulado con un código creado en el
+software R, el cual muestra el comportamiento de la apuesta y se puede observar
+como varía la posibilidad de ganar o perder, que en este caso tiene un tiempo t
+para cuando el jugador gana 10 pesos o se queda sin dinero para apostar.
+Pereira, Colombia
+\end{itemize}
+
+
+\subsection{Desigualdad de Azuma-Hoeffding}
+Supongamos que $X_{n},  n\geq 1$ es una martingala tal que $X_{0}=0$ y $\abs{|X_{i}-X_{i-1}|}\leq d_{i}, 1\leq i\leq n $ para algunas constantes $d_{i}, 1\leq i \leq n$. Luego para todo $t>0,$\\
+\begin{equation*}
+  \mathbb{P}(\abs{{|X_n|}}>t)\leq 2 exp(\frac{-t^{2}}{2\sum_{i=1}^{n}{d_{i}}^{2}})
+  
+\end{equation*}
+    Tenga en cuenta que en el caso especial cuando $d_{i} = d$, podemos tomar $t = xn$ y obtener
+$p$ un límite superior $2 exp(\frac{-x^{2n}}{2d^{2}})$ - que tiene la forma prometida anteriormente.
+Tenga en cuenta que esto es coherente con el Chernoff vinculado para el caso especial $X_{n}$ es
+la suma de i.i.d. términos de media cero, aunque es aplicable solo en el caso especial
+de incrementos acotados.
+
+
+
+
+\section{Diseño del experimento}\label{sec:3}
+
+En el presente artículo se utilizarán algunas técnicas básicas en el lenguaje $R$ tales como : 
+
+\begin{itemize}
+
+\item Funciones básicas como if, while para poder hacer replicas de un posible juego y poder encontrar soluciones y/o valores que reafirmen nuestras predicciones.
+\item Paquete de distribuciones, como por ejemplo rbinom(), esto nos servirá para posibles gráficas que muestren el comportamiento de nuestros experimentos.
+
+\end{itemize}
+
+
+
+
+
+
+
+
+%\begin{table}[h]
+%\caption{An Example of a Table}
+%\label{table_example}
+%\begin{center}
+%\begin{tabular}{|c||c|}
+%\hline
+%One & Two\\
+%\hline
+%Three & Four\\
+%\hline
+%\end{tabular}
+%\end{center}
+%\end{table}
+
+
+  % \begin{figure}[thpb]
+   %   \centering
+  %    \framebox{\parbox{3in}{We suggest that you use a text box to insert a graphic (which is ideally a %300 dpi TIFF or EPS file, with all fonts embedded) because, in an document, this method is somewhat %more stable than directly inserting a picture.
+%}}
+ %     %\includegraphics[scale=1.0]{figurefile}
+ %     \caption{Inductance of oscillation winding on amorphous
+ %      magnetic core versus DC bias magnetic field}
+  %    \label{figurelabel}
+  % \end{figure}
+   
+
+
+
+
+%\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{APENDICE}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Las referencias son importantes para el lector; por lo tanto, cada cita debe ser completa y correcta. Si es posible, las referencias deben ser publicaciones comúnmente disponibles.
+
+
+\begin{thebibliography}{99}
+
+\bibitem{c1} M. Loeve, Probability theory II (Book graduate texts in Mathematics), Ed.  Iberica: Springer-Verlag © 1978
+
+\bibitem{c2}Williams, David (1991). Probability with Martingales. Cambridge University Press. ISBN 0-521-40605-6.
+\bibitem{c4} H. Poor, An Introduction to Signal Detection and Estimation.   New York: Springer-Verlag, 1985, ch. 4.
+ Chicago, IL.
+ \bibitem{c5} Giraldo. G. Norman. Procesos Estocásticos.Universidad Nacional de Colombia. Medellín. 2006. 
+
+
+
+\end{thebibliography}
+
+
+
+
+\end{document}
