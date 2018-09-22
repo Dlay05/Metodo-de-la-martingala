@@ -91,7 +91,7 @@ Existen muchos problemas interesantes a tratar relacionados a este proceso estoc
 
 El objetivo de este estudio es  explicar y enfatizar más la teoría de probabilidades  y desarrollar algun algoritmos y códigos en R que faciliten la comprensión teórica desde el punto de vista de la ciencia computacional. \\
 
-Para ello  en la sección \ref{sec:2.1} partiremos definiendo los conceptos de\textit{ Esperanza condiocional} y \textit{Filtración} para asi definir  en la ección \ref{sec:2.2} lo que es una \textit{Martingala} junto con sus teoremas y propiedades elementales. Luego de tener una vision amplia se aborada en la sección \ref{sec:2.3} los\textit{ Tiempos de paradas} para luego enunciar el \textit{Teorema de paradas para martingalas acotadas}, dando como ejemplo lo que es un camino aleatorio simple. Conceptos que son necesarios para abordar en la sección \ref{sec:2.4} el problema sobre el que versará el trabajo. Finalizando en la sección \ref{sec:2.5} con la \textit{Ecuación de Wald} y la \textit{desigualdad de Azuma-Hoeffding.} 
+Para ello  en la sección \ref{sec:2.1} partiremos definiendo los conceptos de\textit{Filtración} y \textit{Esperanza condiocional} para asi definir  en la sección \ref{sec:2.2} lo que es una \textit{Martingala} junto con sus teoremas y propiedades elementales. Luego de tener una vision amplia se abordará en la sección \ref{sec:2.3} los\textit{ Tiempos de paradas} para luego enunciar el \textit{Teorema de paradas para martingalas acotadas}, dando como ejemplo lo que es un camino aleatorio simple. Conceptos que son necesarios para abordar en la sección \ref{sec:2.4} el problema sobre el que versará el trabajo. Finalizando en la sección \ref{sec:2.5} con la \textit{Ecuación de Wald} y la \textit{desigualdad de Azuma-Hoeffding.} 
 
 \section{Definiciones}\label{sec:2}
 \subsection{Filtración}
@@ -308,16 +308,7 @@ En el presente artículo se utilizarán algunas técnicas básicas en el lenguaj
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{APENDICE}
 
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Las referencias son importantes para el lector; por lo tanto, cada cita debe ser completa y correcta. Si es posible, las referencias deben ser publicaciones comúnmente disponibles.
 
 
 \begin{thebibliography}{99}
