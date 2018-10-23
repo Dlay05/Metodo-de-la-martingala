@@ -245,14 +245,11 @@ de incrementos acotados.
 
 
 
-\section{Diseño del experimento}\label{sec:3}
+%\section{Diseño del experimento}\label{sec:3}
 
-En el presente artículo se utilizarán algunas técnicas básicas en el lenguaje $R$ tales como : 
+
 
 \begin{itemize}
-
-\item Funciones básicas como if, while para poder hacer replicas de un posible juego y poder encontrar soluciones y/o valores que reafirmen nuestras predicciones.
-\item Paquete de distribuciones, como por ejemplo rbinom(), esto nos servirá para posibles gráficas que muestren el comportamiento de nuestros experimentos.
 
 \end{itemize}
 
