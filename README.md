@@ -6,6 +6,6 @@
 
 **Primera entrega:** :calendar: 21/09/2018 .
 
-**Segunda entrega:** :calendar: 02/11/2018
+**Segunda entrega:** :calendar: 09/11/2018
 
 **Horario:** Viernes: 16:00--18:00 horas.
