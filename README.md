@@ -8,4 +8,6 @@
 
 **Segunda entrega:** :calendar: 09/11/2018
 
+**Tercera entrega:** :calendar: 07/12/2018
+
 **Horario:** Viernes: 16:00--18:00 horas.
